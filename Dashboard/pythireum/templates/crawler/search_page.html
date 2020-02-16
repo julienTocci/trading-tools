@@ -1,0 +1,235 @@
+{% include "base.html" %}
+{% load bootstrap4 %}
+
+
+{% block content %}
+<div class="container-scroller">
+<!-- partial:partials/_navbar.html -->
+{% include "crawler/navbar.html" %}
+<!-- partial -->
+    <div class="container-fluid page-body-wrapper">
+        <div class="row row-offcanvas row-offcanvas-right">
+            {% include "crawler/sidebar.html" %}
+            <div class="content-wrapper">
+                <h1>{{search.name}}</h1>
+                <br/>
+                <h3 class="card-title">Mot clés de la recherche:</h3>
+                <p>{{search.keywords}}</p>
+                <br/>
+                <div class="row">
+                    <div class="col-md-10 grid-margin stretch-card">
+                        <div class="card">
+                        <h3 class="card-title">Datasource(s) utilisée(s) pour la recherche, lancez une analyse sur celle-ci pour en récupérer les valeurs qui pourront être ensuite stockées dans Chainwocky</h3>
+
+                            <div class="card-body">
+                                {% for ds in search.chosen_datasource.all %}
+                                <div class="wrapper d-flex align-items-center py-2 border-bottom">
+                                    <div class="wrapper ml-3">
+                                        <h6 class="ml-1 mb-1"><a href="{% url 'crawler:datasource' ds.type ds.name %}">{{ ds.name }}</a></h6>
+                                        <small class="text-muted mb-0"><i class="mdi mdi-message-text mr-1"></i>{{ ds.short_description }}</small>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                            {% if  search.parsing_in_progress %}
+                            <button onclick="ajax($(this));return false;" value="{{search.name}}"  class="btn px-1 py-1 ml-auto btn-primary btn-rounded btn-fw">Analyse en cours <i class="mdi mdi-timelapse font-weight-bold"></i></button>
+                            {% else %}
+                            <button onclick="ajax($(this));return false;" value="{{search.name}}"  class="btn px-1 py-1 ml-auto btn-info btn-rounded btn-fw">Analyser <i class="mdi mdi-magnify font-weight-bold"></i></button>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <script>
+
+                    $.ajaxSetup({
+                      data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
+                    });
+
+                    setInterval(function(){
+                       location.reload()
+                    }, 10000)
+
+                    function ajax($this) {
+                        var value = $this.attr("value");
+
+                        $.ajax({
+                            method: "POST",
+                            url: "/crawler/search/" + value,
+                            data: {
+                            },
+                            success: function (response) {
+                                location.reload()
+                            }
+                        });
+                }
+                </script>
+
+
+<!--
+
+            {% if parsing_in_progress %}
+                <div class="row">
+                <div class="col-lg-12 grid-margin stretch-card">
+              <div class="card">
+                <div class="card-body">
+                  <h4 class="card-title">Bordered table</h4>
+                  <p class="card-description">
+                    Add class <code>.table-bordered</code>
+                  </p>
+                  <table class="table table-bordered">
+                    <thead>
+                      <tr>
+                        <th>
+                          #
+                        </th>
+                        <th>
+                          First name
+                        </th>
+                        <th>
+                          Progress
+                        </th>
+                        <th>
+                          Amount
+                        </th>
+                        <th>
+                          Deadline
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>
+                          1
+                        </td>
+                        <td>
+                          Herman Beck
+                        </td>
+                        <td>
+                          <div class="progress">
+                            <div class="progress-bar bg-success" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                          </div>
+                        </td>
+                        <td>
+                          $ 77.99
+                        </td>
+                        <td>
+                          May 15, 2015
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          2
+                        </td>
+                        <td>
+                          Messsy Adam
+                        </td>
+                        <td>
+                          <div class="progress">
+                            <div class="progress-bar bg-danger" role="progressbar" style="width: 75%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+                          </div>
+                        </td>
+                        <td>
+                          $245.30
+                        </td>
+                        <td>
+                          July 1, 2015
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          3
+                        </td>
+                        <td>
+                          John Richards
+                        </td>
+                        <td>
+                          <div class="progress">
+                            <div class="progress-bar bg-warning" role="progressbar" style="width: 90%" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100"></div>
+                          </div>
+                        </td>
+                        <td>
+                          $138.00
+                        </td>
+                        <td>
+                          Apr 12, 2015
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          4
+                        </td>
+                        <td>
+                          Peter Meggik
+                        </td>
+                        <td>
+                          <div class="progress">
+                            <div class="progress-bar bg-primary" role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                          </div>
+                        </td>
+                        <td>
+                          $ 77.99
+                        </td>
+                        <td>
+                          May 15, 2015
+                        </td>
+                      </tr>
+
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+            </div>
+            {% endif %}
+
+
+            LOADING BAR
+            -->
+
+            <div class="row">
+                <div class="col-lg-12 grid-margin">
+                    <div class="card">
+                      <h2 class="card-title">Dernière valeur(s) crawlée(s)</h2>
+                      <div class="table-responsive">
+                        <table class="table table-striped">
+                          <thead>
+                            <tr>
+                              <th>Datasource</th>
+                              <th>Nom</th>
+                              <th>Valeur</th>
+                              <th>Date</th>
+                            </tr>
+                          </thead>
+                          {% if   crawled_values %}
+                          <tbody>
+                          {% for v in crawled_values reversed %}
+                            <tr>
+                              <td>{{v.origin_source}}</td>
+                              <td>{{v.key}}</td>
+                              <td>{{v.value}}</td>
+                              <td>{{v.date}}</td>
+                            </tr>
+                          {% endfor %}
+                          </tbody>
+                          {% endif %}
+                        </table>
+                      </div>
+                      <div class="d-flex align-items-center justify-content-between flex-wrap">
+                        <p class="mb-0">1 à {{crawled_values| length}} de {{crawled_values| length}} entrées</p>
+                        <nav>
+                          <ul class="pagination rounded-separated pagination-info mt-3">
+                            <li class="page-item"><a class="page-link" href="#"><i class="mdi mdi-chevron-left"></i></a></li>
+                            <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                            <li class="page-item"><a class="page-link" href="#">2</a></li>
+                            <li class="page-item"><a class="page-link" href="#"><i class="mdi mdi-chevron-right"></i></a></li>
+                          </ul>
+                        </nav>
+                      </div>
+                  </div>
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

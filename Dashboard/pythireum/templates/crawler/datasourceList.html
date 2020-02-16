@@ -1,0 +1,58 @@
+{% include "base.html" %}
+{% load bootstrap4 %}
+
+
+{% block content %}
+<div class="container-scroller">
+<!-- partial:partials/_navbar.html -->
+{% include "crawler/navbar.html" %}
+<!-- partial -->
+    <div class="container-fluid page-body-wrapper">
+        <div class="row row-offcanvas row-offcanvas-right">
+            {% include "crawler/sidebar.html" %}
+            <div class="content-wrapper">
+            <div class="row">
+                <div class="col-lg-12 grid-margin">
+                    <div class="card">
+                      <h2 class="card-title">Datasources disponibles</h2>
+                      <div class="table-responsive">
+                        <table class="table table-striped">
+                          <thead>
+                            <tr>
+                              <th>Nom</th>
+                              <th>description</th>
+                              <th>url</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {% for ds in datasources %}
+                                <tr>
+                                <td><a href="{% url 'crawler:datasource' ds.type ds.name %}">{{ ds.name }}</a></td>
+                                <td>{{ds.short_description}}</td>
+                                <td>{{ds.url}}</td>
+                                </tr>
+                            {% endfor %}
+                          </tbody>
+                        </table>
+                      </div>
+                        <div class="d-flex align-items-center justify-content-between flex-wrap">
+                        <p class="mb-0">1 à 10 de {{ datasources|length }} entrée(s)</p>
+                        <nav>
+                          <ul class="pagination rounded-separated pagination-info mt-3">
+                            <li class="page-item"><a class="page-link" href="#"><i class="mdi mdi-chevron-left"></i></a></li>
+                            <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                            <li class="page-item"><a class="page-link" href="#"><i class="mdi mdi-chevron-right"></i></a></li>
+                          </ul>
+                        </nav>
+                      </div>
+                  </div>
+                </div>
+            </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

@@ -1,0 +1,80 @@
+{% include "base.html" %}
+{% load bootstrap4 %}
+
+
+{% block content %}
+<div class="container-scroller">
+<!-- partial:partials/_navbar.html -->
+{% include "crawler/navbar.html" %}
+<!-- partial -->
+    <div class="container-fluid page-body-wrapper">
+        <div class="row row-offcanvas row-offcanvas-right">
+            {% include "crawler/sidebar.html" %}
+            <div class="content-wrapper">
+              <div class="row">
+                <h1>Blockchain  IP X.X.X.X connected</h1>
+                    <div class="d-inline-block">
+                        <div class="bg-success px-4 py-2 rounded">
+                            <i class="mdi mdi-buffer text-white icon-lg"></i>
+                        </div>
+                </div>
+              </div>
+
+
+          <h1>Verifier les valeurs de vos recherches et envoyez les sur la blockchain (cliquez sur la recherche)</h1>
+          <div class="row section social-section">
+
+          {% for s in search_list %}
+
+            <div class="col-lg-4 grid-margin stretch-card">
+
+                {% ifequal  s.status "running" %}
+                    <button value="{{s.name}}" class="social-card w-100 bg-facebook" onclick="ajax($(this));return false;" >
+                {% endifequal  %}
+                {% ifequal  s.status "stopped" %}
+                    <button value="{{s.name}}" class="social-card w-100 bg-twitter" onclick="ajax($(this));return false;" >
+                {% endifequal  %}
+                {% ifequal  s.status "finished" %}
+                    <button value="{{s.name}}" class="social-card w-100 bg-dribbble" onclick="ajax($(this));return false;" >
+                {% endifequal  %}
+
+                    <div class="social-icon">
+                      <i class="icon-social-dropbox icons"></i>
+                    </div>
+                    <div class="content">
+                      <p>{{s.name}}</p>
+                    </div>
+                </div>
+                </button>
+            {% endfor %}
+          <script>
+            $.ajaxSetup({
+              data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
+            });
+
+            function ajax($this) {
+                var value = $this.attr("value");
+                $.ajax({
+                    method: "POST",
+                    url: "/crawler/blockchain/",
+                    data: {
+                        name: value,
+                    },
+                    success: function (response) {
+                        location.reload()
+                    }
+                });
+        }
+        </script>
+
+
+
+          </div>
+
+            </div>
+
+
+        </div>
+    </div>
+</div>
+{% endblock %}

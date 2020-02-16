@@ -1,0 +1,113 @@
+{% include "base.html" %}
+{% load bootstrap4 %}
+
+
+{% block content %}
+<div class="container-scroller">
+<!-- partial:partials/_navbar.html -->
+{% include "crawler/navbar.html" %}
+<!-- partial -->
+    <div class="container-fluid page-body-wrapper">
+        <div class="row row-offcanvas row-offcanvas-right">
+            {% include "crawler/sidebar.html" %}
+            <div class="content-wrapper">
+            <div class="row">
+                <h1>Vos recherches en cours</h1>
+            </div>
+            <br/>
+            <div class="row">
+                <div class="col-lg-6 grid-margin stretch-card">
+                  <div class="card">
+                    <div class="card-body">
+                      <p class="card-description">
+                        Rappel: vos recherches utilise une ou plusieurs datasources
+                      </p>
+                      <table class="table">
+                        <thead>
+                          <tr>
+                              <th>noms</th>
+                            <th>Mots clés</th>
+                            <th>Datasources</th>
+                            <th>Date</th>
+                            <th>Status</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                         {% for s in search_list %}
+                          <tr>
+                              <td><a href="{% url 'crawler:searchpage' s.name %}">{{s.name}}</a></td>
+                            <td>{{s.keywords}}</td>
+                            <td>{% for ds in s.chosen_datasource.all %}
+                                {{ ds.name }}{% if not forloop.last %},{% endif %}
+                                {% endfor %}
+                            </td>
+                            <td>{{s.date}}</td>
+                            {% ifequal  s.status "running" %}
+                               <td><label class="badge badge-success">Running</label></td>
+                            {% endifequal  %}
+                            {% ifequal  s.status "stopped" %}
+                               <td><label class="badge badge-info">Stopped</label></td>
+                            {% endifequal  %}
+                            {% ifequal  s.status "finished" %}
+                               <td><label class="badge badge-warning">Finished</label></td>
+                            {% endifequal  %}
+                              <td>
+                            {% ifequal  s.status "running" %}
+                                  <button value="{{s.name}}" id="pause" onclick="ajax($(this));return false;" type="button" class="btn social-btn btn-danger btn-rounded">
+                                      <i class="mdi mdi-pause-circle"></i>
+                                  </button>
+                            {% endifequal  %}
+                             {% ifequal  s.status "stopped" %}
+                                  <button value="{{s.name}}" id="resume" onclick="ajax($(this));return false;" type="button" class="btn social-btn btn-success btn-rounded">
+                                      <i class="mdi mdi-play-circle"></i>
+                                  </button>
+                            {% endifequal  %}
+                              </td>
+                              <td>
+                                  <button value="{{s.name}}" id="delete" onclick="ajax($(this));return false;" type="button" class="btn social-btn  btn-rounded">
+                                      <i class="mdi mdi-minus-circle"></i>
+                                  </button>
+                              </td>
+                          </tr>
+                         {% endfor %}
+                            <script>
+
+                                $.ajaxSetup({
+                                  data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
+                                });
+
+
+
+                                function ajax($this) {
+                                    var value = $this.attr("value");
+                                    var action = $this.attr("id");
+
+
+                                    $.ajax({
+                                        method: "POST",
+                                        url: "/crawler/searchlist/",
+                                        data: {
+                                            name: value,
+                                            action: action
+                                        },
+                                        success: function (response) {
+                                            location.reload()
+                                        }
+                                    });
+                            }
+                            </script>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+
+            </div>
+            </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+

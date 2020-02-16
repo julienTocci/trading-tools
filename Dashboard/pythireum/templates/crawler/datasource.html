@@ -1,0 +1,33 @@
+{% include "base.html" %}
+{% load bootstrap4 %}
+
+
+{% block content %}
+<div class="container-scroller">
+<!-- partial:partials/_navbar.html -->
+{% include "crawler/navbar.html" %}
+<!-- partial -->
+    <div class="container-fluid page-body-wrapper">
+        <div class="row row-offcanvas row-offcanvas-right">
+            {% include "crawler/sidebar.html" %}
+            <div class="content-wrapper">
+            <div class="row">
+                <h1>{{ds.name}}</h1>
+            </div>
+            <br/>
+            <div class="row">
+                <h2>{{ds.url}}</h2>
+
+            </div>
+            <div class="row">
+                {{ds.short_description}}
+            </div>
+            <div class="row">
+                <p>{{ds.description}}</p>
+            </div>
+            </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

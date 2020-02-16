@@ -36,7 +36,9 @@ The program will run the following tasks
 TODO:
 Use Yahou Finance historical data as input (example https://fr.finance.yahoo.com/quote/%5EFCHI/history?p=%5EFCHI)
 Use day to day data. We need to see trends overs several weeks (dots_for_pattern being 30 would mean pattern over a month)
+Make possible the input of 3 data files (data for a day, data for a week, data for a month) and adjust variables for each
 Find a way to multiThread the computation (way too long as for now) and/or usr machines with more ressources (Cloud)
+
 
 
 

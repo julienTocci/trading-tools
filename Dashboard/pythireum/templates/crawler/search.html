@@ -1,0 +1,84 @@
+{% include "base.html" %}
+{% load bootstrap4 %}
+
+
+{% block content %}
+<div class="container-scroller">
+<!-- partial:partials/_navbar.html -->
+{% include "crawler/navbar.html" %}
+<!-- partial -->
+    <div class="container-fluid page-body-wrapper">
+        <div class="row row-offcanvas row-offcanvas-right">
+            {% include "crawler/sidebar.html" %}
+            <div class="content-wrapper">
+            <div class="row">
+                <h1>Démarrer une nouvelle recherche</h1>
+            </div>
+            <br/>
+            <div class="row">
+              <div class="col-md-10 grid-margin stretch-card">
+              <div class="card">
+                <div class="card-body">
+
+                  <form class="forms-sample" action="{% url 'crawler:search' %}" method="post">
+                      {% csrf_token %}
+                        <!--
+                        {{form}} -->
+                      <div class="form-group row">
+                      <div class="col-sm-9">
+                        <h4>Nom de votre recherche</h4>
+                          {% if missing_name %}
+                            <p class="table-danger">Entrez un nom</p>
+                          {% endif %}
+                          {% if existing_name %}
+                            <p class="table-danger">Ce nom est déjà utilisé par une recherche active</p>
+                          {% endif %}
+                        <input type="text" name="name" class="form-control" placeholder="Entrez le nom de votre recherche">
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-6">
+                          <h4>Choisissez les datasources que vous voulez utiliser</h4>
+                          {% if missing_ds %}
+                          <p class="table-danger">Selectionnez au moins 1 datasource</p>
+                          {% endif %}
+                          <p class="card-description">Vous pouvez voir leurs détails dans le menu 'DATASOURCE' </p>
+                        <div class="form-group">
+                          {% for ds in datasources %}
+                          <div class="form-check form-check-flat">
+                            <label class="form-check-label">
+                              <input  name="{{ds.name}}" type='hidden' >
+                              <input type="checkbox" name="{{ds.name}}" class="form-check-input" checked>
+                              {{ds.name}}
+                            </label>
+                          </div>
+                            {% endfor %}
+                        </div>
+                      </div>
+                    </div>
+                      <br/>
+                      <div class="form-group row">
+                          <div class="col-sm-9">
+                            <h4>Entrez les mots clés à rechercher séparés par une virgule</h4>
+                              {% if missing_keywords %}
+                                <p class="table-danger">Entrez au moins un mot clé</p>
+                              {% endif %}
+                            <input type="text" name="keywords" class="form-control" placeholder="Entrez des mots clés sans espaces">
+                          </div>
+                        </div>
+                      <button type="submit" class="btn btn-danger"><i class="mdi  mdi-chart-donut"></i>Démarrer</button>
+                  </form>
+                    {% if valid_form %}
+                        <h4 class="table-success">Votre recherche a démarrer</h4>
+                    {% endif %}
+                </div>
+              </div>
+
+            </div>
+            </div>
+            </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

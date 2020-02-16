@@ -1,0 +1,67 @@
+{% load static %}
+
+<!-- partial:partials/_sidebar.html -->
+<nav class="sidebar sidebar-offcanvas" id="sidebar">
+  <ul class="nav">
+    <li class="nav-item nav-category">
+      <span class="nav-link">GENERAL</span>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="/crawler/">
+        <span class="menu-title">Tableau de bord</span>
+        <i class="icon-speedometer menu-icon"></i>
+      </a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="/crawler/search">
+        <span class="menu-title">Démarrer une recherche</span>
+        <i class="icon-chemistry menu-icon"></i>
+      </a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="/crawler/searchlist">
+        <span class="menu-title">En cours</span>
+        <i class="icon-ghost menu-icon"></i>
+      </a>
+    </li>
+
+    <li class="nav-item nav-category">
+      <span class="nav-link">Blockchain</span>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="/crawler/blockchain/">
+        <span class="menu-title">Passerelle</span>
+        <i class="icon-layers menu-icon"></i>
+      </a>
+    </li>
+    <li class="nav-item nav-category">
+      <span class="nav-link">Datasources</span>
+    </li>
+    {% if datasource_socialnetwork_exist %}
+    <li class="nav-item">
+      <a class="nav-link" href="/crawler/datasource/socialnetwork/">
+        <span class="menu-title">sociale</span>
+        <i class="icon-pie-chart menu-icon"></i>
+      </a>
+    </li>
+    {% endif %}
+    {% if datasource_web_exist %}
+    <li class="nav-item">
+      <a class="nav-link" href="/crawler/datasource/web/">
+        <span class="menu-title">web</span>
+        <i class="icon-pie-chart menu-icon"></i>
+      </a>
+    </li>
+    {% endif %}
+    {% if datasource_custom_exist %}
+    <li class="nav-item">
+      <a class="nav-link" href="/crawler/datasource/custom/">
+        <span class="menu-title">personnalisé</span>
+        <i class="icon-pie-chart menu-icon"></i>
+      </a>
+    </li>
+    {% endif %}
+
+  </ul>
+</nav>
+<!-- partial -->

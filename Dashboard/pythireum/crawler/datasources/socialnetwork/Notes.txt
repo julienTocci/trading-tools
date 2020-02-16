@@ -1,0 +1,20 @@
+Twitter API -> AWS Kinesis -> Aws S3 -> SpaCy-> Backend -> Fabric
+
+Now everything is setup:
+You can create a Kinesis stream to follow some users and track only specific terms :
+python3 createdatasource.py keyword1-keyword2 followUserId1 followUserId2
+
+Get user Id you want to follow and put it in stream.filter(follow=)
+https://tweeterid.com/
+
+See patterns of track :
+https://developer.twitter.com/en/docs/tweets/rules-and-filtering/overview/standard-operators.html
+
+More information
+https://developer.twitter.com/en/docs/tweets/filter-realtime/guides/basic-stream-parameters
+
+
+Tests (https://developer.twitter.com/en/docs/tweets/filter-realtime/guides/basic-stream-parameters
+):
+- Putting track and followed show all tweet from anyone which contains track (doesn't seems to take into account follow)
+- Putting only follow=['UserId'] permits to follow twitter from users (will get all tweets from the users?)

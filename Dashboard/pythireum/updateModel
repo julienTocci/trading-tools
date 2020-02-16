@@ -1,0 +1,25 @@
+python3 manage.py makemigrations crawler
+python3 manage.py migrate
+
+python manage.py shell
+>> from crawler.models import Datasource
+>> d = Datasource(name="Twitter", url="http://", type="socialnetwork")
+>> d.save()
+
+
+>> d1 = Datasource(name="LesObs", url="http://", type="web")
+>> d1.save()
+
+>> d2 = Datasource(name="Boursier.com", url="http://", type="custom")
+>> d2.save()
+
+>> import datetime
+>> today = datetime.datetime.today()
+>> from crawler.models import Search
+>> s = Search(keywords="oracle, blockchain", date=today, status="running")
+>> s.save()
+>> s.chosen_datasource.add(d2)
+
+
+>> from crawler.models import Value
+>> v = Value(parent_search="fffff", origin_source="LesObs", key="Revenue Growth", value="9000")

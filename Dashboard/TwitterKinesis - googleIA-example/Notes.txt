@@ -1,0 +1,52 @@
+Twitter API + Google NLP on EC2 -> AWS Kinesis -> Aws S3 -> Spark -> Backend -> Fabric
+
+Create ec2 instance:
+	- sudo add-apt-repository ppa:webupd8team/java
+	- sudo apt update; sudo apt install oracle-java8-installer
+	- sudo apt install oracle-java8-set-default
+	- sudo apt install scala
+	- wget https://www-eu.apache.org/dist/spark/spark-2.4.0/spark-2.4.0-bin-hadoop2.7.tgz
+	- tar -xzvf spark-2.4.0-bin-hadoop2.7.tgz
+	- rm spark-2.4.0-bin-hadoop2.7.tgz
+
+	- sudo pip3 install google-cloud
+
+	- export CLOUD_SDK_REPO="cloud-sdk-$(lsb_release -c -s)"
+	- echo "deb http://packages.cloud.google.com/apt $CLOUD_SDK_REPO main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
+	- curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
+	- sudo apt-get update && sudo apt-get install google-cloud-sdk
+	- sudo apt install google-cloud-sdk-app-engine-python
+	- gcloud init and follow instructions
+	- pip3 install requests (OPTIONAL?)
+	- pip3 install urllib3 (OPTIONAL?)
+	- sudo pip3 install google-cloud-language
+	- sudo pip3 install --upgrade oauth2client
+	- gcloud iam service-accounts create agregator
+	- gcloud projects add-iam-policy-binding PROJECTID --member "serviceAccount:agregator@PROJECTID.iam.gserviceaccount.com" --role "roles/owner"
+	- gcloud iam service-accounts keys create [FILE_NAME].json --iam-account [NAME]@[PROJECT_ID].iam.gserviceaccount.com
+	-  export GOOGLE_APPLICATION_CREDENTIALS=~/google-creds.json
+
+
+
+
+Go to google cloud console, AutoMl Natural Language and enable the API
+
+
+Now everything is setup:
+	You can create a Kinesis stream to follow some users and track only specific terms :
+	  python3 createdatasource.py testKinesis
+
+Get user Id you want to follow and put it in stream.filter(follow=)
+https://tweeterid.com/
+
+See patterns of track :
+https://developer.twitter.com/en/docs/tweets/rules-and-filtering/overview/standard-operators.html
+
+More information
+https://developer.twitter.com/en/docs/tweets/filter-realtime/guides/basic-stream-parameters
+
+
+Tests (https://developer.twitter.com/en/docs/tweets/filter-realtime/guides/basic-stream-parameters
+):
+- Putting track and followed show all tweet from anyone which contains track (doesn't seems to take into account follow)
+- Putting only follow=['UserId'] permits to follow twitter from users (will get all tweets from the users?)

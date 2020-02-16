@@ -1,0 +1,159 @@
+{% include "base.html" %}
+{% load static %}
+{% load bootstrap4 %}
+
+{% block content %}
+  <div class="container-scroller">
+    <!-- partial:partials/_navbar.html -->
+  {% include "crawler/navbar.html" %}
+    <!-- partial -->
+    <div class="container-fluid page-body-wrapper">
+      <div class="row row-offcanvas row-offcanvas-right">
+        {% include "crawler/sidebar.html" %}
+        <div class="content-wrapper">
+          <div class="row">
+                      <!-- ROW ENDS -->
+          <div class="row">
+            <div class="col-lg-12 grid-margin">
+              <div class="card performance-cards">
+                <div class="card-body">
+                  <h4 class="card-title mb-0">Statistiques</h4>
+                  <div class="row">
+                    <div class="col d-flex flex-row justify-content-center align-items-center">
+                      <div class="wrapper icon-circle bg-success">
+                        <i class="icon-check icons"></i>
+                      </div>
+                      <div class="wrapper text-wrapper">
+                        <p class="text-dark">{{verified_values_count}}</p>
+                        <p>Nombre total de valeurs vérifiées</p>
+                      </div>
+                    </div>
+                    <div class="col d-flex flex-row justify-content-center align-items-center">
+                      <div class="wrapper icon-circle bg-danger">
+                        <i class="icon-briefcase icons"></i>
+                      </div>
+                      <div class="wrapper text-wrapper">
+                        <p class="text-dark">{{request_analyzed}}</p>
+                        <p>Nombre total de textes analysés</p>
+                      </div>
+                    </div>
+                    <div class="col d-flex flex-row justify-content-center align-items-center">
+                      <div class="wrapper icon-circle bg-warning">
+                        <i class="icon-rocket icons"></i>
+                      </div>
+                      <div class="wrapper text-wrapper">
+                        <p class="text-dark">{{number_crawler_value}}</p>
+                        <p>Nombre total de valeurs crawlées</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+            <div class="col-lg-12 grid-margin">
+              <div class="card">
+                  <h2 class="card-title">Dernière recherches</h2>
+                  <div class="table-responsive">
+                    <table class="table table-striped">
+                      <thead>
+                        <tr>
+                          <th>Nom</th>
+                          <th>Mot clés</th>
+                          <th>Date</th>
+                          <th>Datasource(s) utilisée(s)</th>
+                          <th>Status</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                      {% for s in all_search reversed %}
+                        <tr>
+                          <td>{{s.name}}</td>
+                          <td>{{s.keywords}}</td>
+                          <td>{{s.date}}</td>
+                          <td>{% for ds in s.chosen_datasource.all %}
+                                {{ ds.name }}{% if not forloop.last %},{% endif %}
+                                {% endfor %}</td>
+                          <td>{{s.status}}</td>
+                        </tr>
+                      {% endfor %}
+                      </tbody>
+                    </table>
+                  </div>
+                    <div class="d-flex align-items-center justify-content-between flex-wrap">
+                    <p class="mb-0">1 à {{all_search| length}} de {{all_search| length}} entrées</p>
+                    <nav>
+                      <ul class="pagination rounded-separated pagination-info mt-3">
+                        <li class="page-item"><a class="page-link" href="#"><i class="mdi mdi-chevron-left"></i></a></li>
+                        <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                        <li class="page-item"><a class="page-link" href="#"><i class="mdi mdi-chevron-right"></i></a></li>
+                      </ul>
+                    </nav>
+                  </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-lg-12 grid-margin">
+              <div class="card">
+                <div class="card-body">
+                  <h2 class="card-title">Dernières valeurs crawlées</h2>
+                  <div class="table-responsive">
+                    <table class="table table-striped">
+                      <thead>
+                        <tr>
+                          <th>Sources</th>
+                          <th>nom</th>
+                          <th>valeur</th>
+                          <th>Date</th>
+                        </tr>
+                      </thead>
+                      {% if   last_hundred_in_ascending_order %}
+                      <tbody>
+                          {% for v in last_hundred_in_ascending_order  %}
+                            <tr>
+                              <td>{{v.origin_source}}</td>
+                              <td>{{v.key}}</td>
+                              <td>{{v.value}}</td>
+                              <td>{{v.date}}</td>
+                            </tr>
+                          {% endfor %}
+                      </tbody>
+                      {% endif %}
+                    </table>
+                  </div>
+                  <div class="d-flex align-items-center justify-content-between flex-wrap">
+                    <p class="mb-0">1 à 10 de X entrées</p>
+                    <nav>
+                      <ul class="pagination rounded-separated pagination-info mt-3">
+                        <li class="page-item"><a class="page-link" href="#"><i class="mdi mdi-chevron-left"></i></a></li>
+                        <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                        <li class="page-item"><a class="page-link" href="#">4</a></li>
+                        <li class="page-item"><a class="page-link" href="#"><i class="mdi mdi-chevron-right"></i></a></li>
+                      </ul>
+                    </nav>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- ROW ENDS -->
+        </div>
+        <!-- content-wrapper ends -->
+        <!-- partial:partials/_footer.html -->
+        <footer class="footer">
+          <div class="container-fluid clearfix">
+            <span class="text-muted d-block text-center text-sm-left d-sm-inline-block">Copyright © 2019 <a href="http://blocksnatch.com/" target="_blank">Blocksnatch</a>. All rights reserved.</span>
+          </div>
+        </footer>
+        <!-- partial -->
+      </div>
+      <!-- row-offcanvas ends -->
+    </div>
+    <!-- page-body-wrapper ends -->
+  </div>
+{% endblock %}
