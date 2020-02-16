@@ -12,27 +12,35 @@ sudo apt-get purge libappstream3
 sudo apt-get update
 
 wget https://bootstrap.pypa.io/get-pip.py
+
 ln -s python3.7 python
+
 python get-pip.py
 
-# Following are useful for pattern-recog
+Following are useful for pattern-recog
+
 python -m pip install numpy
+
 python -m pip install matplotlib
 
 sudo apt-get install python3.7-dev
 
 sudo python -m pip uninstall lxml
+
 sudo python -m pip install lxml
 
 
 python -m pip install Django boto3 tweepy uuid django-bootstrap4 beautifulsoup4 scrapy crochet spacy textacy
 
-#python -m spacy download en_core_web_lg
+
 python -m spacy download en_core_web_md
+
 python -m spacy download fr_core_news_md
 
-# The following will downgrade spacy and make unavailable some models and function but allow to have entity number fro french text
-# The best scenario would be to train our proper model for french texts
+The following will downgrade spacy and make unavailable some models and function but allow to have entity number fro french text
+
+## The best scenario would be to train our proper model for french texts ##
+
 pip install https://github.com/pagesjaunes/spacy-french-models/releases/download/v0.0.1-alpha/fr_model-0.0.1.tar.gz
 
 python -m spacy link fr_model fr_default --force
@@ -66,10 +74,13 @@ Create a file creds.json in pythireum/crawler/datasources/socialnetwork/
 
 ## Starting the App ##
 go in pythireum dir
+
 python manage.py runserver 0.0.0.0:8000
 
 ## Admin interface ##
+
 user = blocksnatchAdmin
+
 pw = blockSnatch24!
 
 

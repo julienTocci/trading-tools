@@ -2,15 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="91d49d38-c64a-4bc8-982b-20b3017dfcf6" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Dashboard/TwitterKinesis - googleIA-example/README.md" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Dashboard/pythireum/crawler/datasources/custom/README.md" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Dashboard/pythireum/crawler/datasources/web/README.md" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Dashboard/TwitterKinesis - googleIA-example/Notes.txt" afterPath="" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/Dashboard/pythireum/crawler/datasources/socialnetwork/Notes.txt" afterPath="$PROJECT_DIR$/Dashboard/pythireum/crawler/datasources/socialnetwork/README.md" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Dashboard/README.md" afterPath="$PROJECT_DIR$/Dashboard/README.md" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Dashboard/pythireum/crawler/datasources/spider/boursiercom_spider.py" afterPath="$PROJECT_DIR$/Dashboard/pythireum/crawler/datasources/spider/boursiercom_spider.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/forex-stock-pattern-recog/README.md" afterPath="$PROJECT_DIR$/forex-stock-pattern-recog/README.md" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -25,7 +17,17 @@
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="375">
-      <file leaf-file-name="Boursiercom_crawler.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="README.md" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/Dashboard/README.md">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="352">
+              <caret line="16" column="0" lean-forward="true" selection-start-line="16" selection-start-column="0" selection-end-line="16" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Boursiercom_crawler.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Dashboard/pythireum/crawler/datasources/custom/Boursiercom_crawler.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="154">
@@ -648,18 +650,18 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Dashboard/README.md">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="642">
-          <caret line="84" column="126" lean-forward="false" selection-start-line="84" selection-start-column="126" selection-end-line="84" selection-end-column="126" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Dashboard/pythireum/crawler/datasources/custom/Boursiercom_crawler.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="154">
           <caret line="7" column="25" lean-forward="false" selection-start-line="7" selection-start-column="14" selection-end-line="7" selection-end-column="25" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Dashboard/README.md">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="352">
+          <caret line="16" column="0" lean-forward="true" selection-start-line="16" selection-start-column="0" selection-end-line="16" selection-end-column="0" />
           <folding />
         </state>
       </provider>
