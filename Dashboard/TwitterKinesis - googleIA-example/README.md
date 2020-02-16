@@ -1,24 +1,17 @@
-Twitter API + Google NLP on EC2 -> AWS Kinesis -> Aws S3 -> Spark -> Backend -> Fabric
+This tool permits to retrieve all tweets from a Twitter profile and apply NLP on it.
 
-Create ec2 instance:
-	- sudo add-apt-repository ppa:webupd8team/java
-	- sudo apt update; sudo apt install oracle-java8-installer
-	- sudo apt install oracle-java8-set-default
-	- sudo apt install scala
-	- wget https://www-eu.apache.org/dist/spark/spark-2.4.0/spark-2.4.0-bin-hadoop2.7.tgz
-	- tar -xzvf spark-2.4.0-bin-hadoop2.7.tgz
-	- rm spark-2.4.0-bin-hadoop2.7.tgz
 
-	- sudo pip3 install google-cloud
+This is an example of the usage of the google sentiment analysis
 
+
+Setup:
+	- python -m pip install google-cloud
 	- export CLOUD_SDK_REPO="cloud-sdk-$(lsb_release -c -s)"
 	- echo "deb http://packages.cloud.google.com/apt $CLOUD_SDK_REPO main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
 	- curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
 	- sudo apt-get update && sudo apt-get install google-cloud-sdk
 	- sudo apt install google-cloud-sdk-app-engine-python
-	- gcloud init and follow instructions
-	- pip3 install requests (OPTIONAL?)
-	- pip3 install urllib3 (OPTIONAL?)
+	- gcloud init (and follow instructions)
 	- sudo pip3 install google-cloud-language
 	- sudo pip3 install --upgrade oauth2client
 	- gcloud iam service-accounts create agregator

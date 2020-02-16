@@ -8,6 +8,8 @@ import re
 from scrapy.http import Request
 
 
+# Used in the custom Datasources
+
 # Using multiple urls will put the data in the same S3 file, hence when we get the last json object to have the last values, we will miss
 # the last-1 object with the values from the second url
 target_urls =  ['https://www.boursier.com/indices/cours/cac-40-FR0003500008,FR.html']

@@ -5,7 +5,7 @@ This project represents a machine learning program that is able to recognize pat
 
 ## Requirements 
 In order to run the code you need to have the following libraries and programs installed on your computer
-* Python 3.6
+* Python 3.7
 * `numpy`
 * `matplotlib`
 

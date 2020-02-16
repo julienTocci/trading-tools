@@ -1,8 +1,15 @@
 Twitter API -> AWS Kinesis -> Aws S3 -> SpaCy-> Backend -> Fabric
 
+
+!!!!
+The crawler is simply reading all tweets coming from specified source and storing them in S3 (it has a buffer of 5min before pushing to s3)
+The parser is using a simple NLP to extract the entities from all stored tweets.
+It uses the methods in the nlp_helper class (there is one for french and one for english but both should be improved).
+!!!!
+
+
 Now everything is setup:
 You can create a Kinesis stream to follow some users and track only specific terms :
-python3 createdatasource.py keyword1-keyword2 followUserId1 followUserId2
 
 Get user Id you want to follow and put it in stream.filter(follow=)
 https://tweeterid.com/
