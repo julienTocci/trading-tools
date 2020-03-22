@@ -9,6 +9,9 @@ aapl <- getSymbols.yahoo("AAPL", from=dt, auto.assign= F)
 aaplClose <- aapl[,6]
 
 
+# Current AAPL volatility over 30 days period
+vClose <- volatility(aapl[,6], n = 30, calc="close")
+
 
 chartSeries(aapl)
 
