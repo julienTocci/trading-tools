@@ -1,73 +1,136 @@
 library(RND)
 library(RQuantLib)
+library(quantmod)
+library(PerformanceAnalytics)
+library(magrittr)
+library(purrr)
+
+library(tidyverse)
+library(timetk)
+library(tidyquant)
+
+library(graphics)
 
 # Trading in options with a wide range of exercise prices and a single maturity allows 
 # a researcher to extract the market's risk-neutral density (RND) over the underlying price at expiration.
-# The RND: (risk neutral density) contains investors’ beliefs about the true probabilities blended with their risk 
+# The RND: (risk neutral density) contains investors beliefs about the true probabilities blended with their risk 
 #preferences, both of which are of great interest to academics and practitioners alike
-
-
-# I Printed a document talking about  one's expectations to the true value of RND
-# https://www.annualreviews.org/doi/pdf/10.1146/annurev-financial-110217-022944
 
 # # https://cran.r-project.org/web/packages/RND/RND.pdf
 
+getwd()
+setwd("C:\\Users\\julien\\Desktop\\projets\\TRADING\\R\\Options")
 
-###
-### You should see that all methods extract the same density!
-###
+
+tradeDateMinusFiveYears  <- "2015-03-28"
+currentTradeDate <- "2020-03-28"
+maturityDate <- "2020-04-03"
+underlyingStock <- "AAPL"
+OptionType <- "call"
+OptionPrice <- 1.90
+optionStrike <- 270.00
+# Annualized dividendyield 1.24% exmaple
+dividendYield <- 0.0124
+dte <- round( as.numeric(difftime(maturityDate,currentTradeDate, units = "days")),0)
+timeToOptionsMaturity <- dte/365
+
+
+################# Compute hitorical volatility, riskfree rate, dividend yield,  get Options data, 
+stock <- getSymbols.yahoo( underlyingStock, from=tradeDateMinusFiveYears, auto.assign= F)
+VolatilitySlide <- 30
+daysInaYear <- 262
+historicalvol=volatility(stock,n=VolatilitySlide,N=daysInaYear,calc="close")
+chartSeries(historicalvol)
+LastVolatility <- historicalvol[length(historicalvol)]
+
+options <- getOptionChain(underlyingStock, maturityDate)
+calls <- options$calls
+callstrikes <- calls$Strike
+callVol <- calls$Vol
+callOpenInterest <- calls$OI
+callLast <- calls$Last
+
+puts <- options$puts
+putstrikes <- puts$Strike
+putVol <- puts$Vol
+putOpenInterest <- puts$OI
+putLast <- puts$Last
+
+
+
+getSymbols('DGS10',src = 'FRED', from = tradeDateMinusFiveYears)
+
+DGS10 <- to.monthly(DGS10, indexAt = "last", OHLC = FALSE)
+lastDGS10RateValue = coredata(DGS10[length(DGS10)])
+
 
 ############################################################################
-#### First let's calculate the theorical price of options in the range 200-400 ####
+#### First let's calculate the theorical price of the options ####
 
 # current aapl volatility
-sigma = 0.99
-# AAPL risk-free rate is 0,92%
-r = 0.092
+sigma = coredata(LastVolatility)
+# risk free rate based on 10 years treasury bonds
+r = lastDGS10RateValue/100
 # dividend yield of AAPL
-y = 0.01
+y = dividendYield
 # 5 DTE 
-te = 5/365
+te = timeToOptionsMaturity
 # current price of AAPL
-s0 = 229.24
-# Strike price of the call
-k = 250.00	
+s0 = coredata(last(Cl(stock)))
+
 
 # Estimates using black & scholes
 
-call.strikes.bsm = seq(from = 200, to = 400, by = 5)
-market.calls.bsm = price.bsm.option(r =r, te = te, s0 = s0,
-                                    k = call.strikes.bsm, sigma = sigma, y = y)$call
-put.strikes.bsm = seq(from = 200, to = 400, by = 5)
-market.puts.bsm = price.bsm.option(r =r, te = te, s0 = s0,
-                                   k = put.strikes.bsm, sigma = sigma, y = y)$put
+callStrikeBsm = callstrikes
+marketcallBsm = price.bsm.option(r =r, te = te, s0 = s0,
+                                    k = callStrikeBsm, sigma = sigma, y = y)$call
+
+
+putStrikeBsm = putstrikes
+marketputBsm = price.bsm.option(r =r, te = te, s0 = s0,
+                                   k = putStrikeBsm, sigma = sigma, y = y)$put
+
+
+extract.bsm.density(r = r, y = y, te = te, s0 = s0, market.calls = marketcallBsm,
+                    call.strikes = callStrikeBsm, market.puts = marketputBsm,
+                    put.strikes = putStrikeBsm, lambda = 1, hessian.flag = FALSE)
+
+
+# TODO PLOT FROM OUTPUT OF EXTRAT BSM DENSITY
+png("density.png") 
+
+x<- seq(0,10,length = 100)
+a <- dlnorm(x, meanlog = 0, sdlog = 1, log = FALSE)
+plot(x,a, lty=5, col="blue", lwd=3)
+print("done")
+dev.off()
+browseURL("density.png") 
+
+
+
+
+#Use the ouput value to check
+# https://homepage.divms.uiowa.edu/~mbognar/applets/lognormal.html
 
 
 # IV for a specific call price
-IV = AmericanOptionImpliedVolatility(type="call", value=3.70, underlying=s0,
-                                     strike=k, dividendYield=y, riskFreeRate=r,
+IV = AmericanOptionImpliedVolatility(type=OptionType, value=OptionPrice, underlying=s0,
+                                     strike=optionStrike, dividendYield=y, riskFreeRate=r,
                                      maturity=te, volatility=sigma)
 
-# IV = 99%
 
-k = 200
-# IV for a specific call price
-IV = AmericanOptionImpliedVolatility(type="call", value=33, underlying=s0,
-                                     strike=k, dividendYield=y, riskFreeRate=r,
-                                     maturity=te, volatility=sigma)
+# Estimate using mixutre of lognormals
+#extract.am.density(initial.values = rep(NA, 10), r, te, s0, market.calls,
+#                   calls = 1, puts, put.weights = 1, strikes, lambda = 1,
+#                   hessian.flag = F, cl = list(maxit = 10000))
 
-# IV = 134%: indeed the premium is very high and indicates that the stock needs consequential movement in order to be ITM
-
-
-#market.puts.bsm and market.calls.bsm should output the estimated price for every strike price in range 200-400
 ########################################################################################
 
 
 ##############################################################################################
 #### We can extract the rnd based of all models available in the package in a pdf ####
 # Get current directory
-getwd()
-setwd("C:\\Users\\julien\\Desktop\\projets\\TRADING\\R\\Options")
+
 
 # MOE function extracts the risk neutral density based on all models and summarizes the results.
 # takes few minutes
@@ -77,10 +140,23 @@ setwd("C:\\Users\\julien\\Desktop\\projets\\TRADING\\R\\Options")
 # Necessary for the density to be risk neutral
 # https://en.wikipedia.org/wiki/Penalty_method
 
-#martingale_factor = 1
-martingale_factor = 100
+#martingale_factor = 100
+martingale_factor = 1
 
-MOE(market.calls.bsm, call.strikes.bsm, market.puts.bsm, put.strikes.bsm, call.weights = 1,
+
+callStrikeBsm = seq(from = 200, to = 400, by = 5)
+marketcallBsm = price.bsm.option(r =r, te = te, s0 = s0,
+                                    k = callStrikeBsm, sigma = sigma, y = y)$call
+putStrikeBsm = seq(from = 200, to = 400, by = 5)
+marketputBsm = price.bsm.option(r =r, te = te, s0 = s0,
+                                   k = putStrikeBsm, sigma = sigma, y = y)$put
+
+
+
+# TODO USE 
+# https://github.com/cran/RND/blob/master/R/MOE.R
+
+MOE(marketcallBsm, callStrikeBsm, marketputBsm, putStrikeBsm, call.weights = 1,
     put.weights = 1, lambda = martingale_factor, s0=s0, r=r , te=te, y=y, file.name ="summary")
     
 
