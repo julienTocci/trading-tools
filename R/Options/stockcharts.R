@@ -19,7 +19,7 @@ xclose <- x[,6]
 
 
 
-chartSeries(x3, TA="addVo();
+chartSeries(x, TA="addVo();
             addRSI(14);
             addLines(h=c(30,70), on=3);
             addSMA(50,col='blue');

@@ -1,4 +1,5 @@
 # CTRL+SHIFT+ENTER to execute whole script
+# CTRL + SHIFT + S to execute without verbose debug
 
 library(quantmod)
 library(PerformanceAnalytics)
