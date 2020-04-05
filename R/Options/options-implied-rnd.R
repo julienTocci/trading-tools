@@ -25,7 +25,7 @@ setwd("C:\\Users\\julien\\Desktop\\projets\\TRADING\\R\\Options")
 tradeDateMinusFiveYears  <- "2015-04-04"
 currentTradeDate <- "2020-04-04"
 maturityDate <- "2020-05-01"
-underlyingStock <- "GOOGL"
+underlyingStock <- "UBER"
 OptionType <- "call"
 OptionPrice <- 1.90
 optionStrike <- 280.00
@@ -72,10 +72,6 @@ getSymbols('DGS10',src = 'FRED', from = tradeDateMinusFiveYears)
 
 DGS10 <- to.monthly(DGS10, indexAt = "last", OHLC = FALSE)
 lastDGS10RateValue = coredata(DGS10[length(DGS10)])
-
-
-############################################################################
-#### First let's calculate the theorical price of the options ####
 
 # current aapl volatility
 sigma = coredata(LastVolatility)
@@ -153,6 +149,7 @@ abline(v=x[which.max(y.bsm)], col="red")
 axis(1, at=x[which.max(y.bsm)],labels=x[which.max(y.bsm)],mgp = c(10, 2, 0))
 
 # Extracting Volatility from the computed BSM model's RND
+# Removing the sqrt(te) from the price.bsm.option
 bsm.sigma = bsm.zeta/sqrt(te)
 
 # Predict prices using the IV of the BSM pricing model
@@ -164,14 +161,18 @@ bsm.res.calls = mean(abs(lm(bsm.predicted.calls ~ ComputedBsmCallsPrices)$res))
 bsm.res.puts  = mean(abs(lm(bsm.predicted.puts  ~ ComputedBsmPutsPrices)$res))
 
 par(mfrow=c(1,2), mar=c(7,5,7,5))
-plot(bsm.predicted.calls ~ ComputedBsmCallsPrices, ylab="Predicted", xlab = "Market Price", main=paste("Single LNorm, Calls, ","mean|res| = ",round(bsm.res.calls,3)),
+plot(bsm.predicted.calls ~ ComputedBsmCallsPrices, ylab="Predicted", xlab = "Computed Market Price", main=paste("Single LNorm, Calls, ","mean|res| = ",round(bsm.res.calls,3)),
      cex.axis = 1.25, cex.lab = 1.25)
 abline(a=0,b=1, col="red")
-plot(bsm.predicted.puts  ~ ComputedBsmPutsPrices,  ylab="Predicted", xlab = "Market Price", main=paste("Single LNorm, Puts, ","mean|res| = ",round(bsm.res.puts,3)),
+plot(bsm.predicted.puts  ~ ComputedBsmPutsPrices,  ylab="Predicted", xlab = "Computed Market Price", main=paste("Single LNorm, Puts, ","mean|res| = ",round(bsm.res.puts,3)),
      cex.axis = 1.25, cex.lab = 1.25)
 abline(a=0,b=1, col="red")
 par(mfrow=c(1,1))
 
+
+plot(NA, xlim=c(0,10), ylim=c(0,10), bty='n',
+     xaxt='n', yaxt='n', xlab='', ylab='')
+text(1,4,"When the points are below the red line: The market price are overpriced else they are underpriced", pos=4)
 
 
 tmp.data.calls = cbind(realCallPrices,realCallstrikes, bsm.predicted.calls)
@@ -209,7 +210,7 @@ if (asymetryPerception>0){
   print("The market is biaised over the underlying future value being less than the most expected value")  
 }
 
-# Historical Asymmetry Perception ("Future values")
+# Asymmetry Perception ("Future values")
 print("Large change in the asymmetry perception Delta indicates that the expectations shifted due to a fundamental or non-fundamental reason")
 futurOptions <- getOptionChain(underlyingStock, NULL)
 asymetryPerceptionDeltaArray <- c()
@@ -285,9 +286,9 @@ The belief factor explains more variation in the risk-neutral skewness than the 
 dev.off()
 
 # IV for a specific call price
-IV = AmericanOptionImpliedVolatility(type=OptionType, value=OptionPrice, underlying=s0,
-                                     strike=optionStrike, dividendYield=y, riskFreeRate=r,
-                                     maturity=te, volatility=sigma)
+#IV = AmericanOptionImpliedVolatility(type=OptionType, value=OptionPrice, underlying=s0,
+#                                     strike=optionStrike, dividendYield=y, riskFreeRate=r,
+#                                     maturity=te, volatility=sigma)
 
 
 
